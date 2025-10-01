@@ -1,0 +1,51 @@
+name: MAUI Unit Tests
+ 
+on:
+  release:
+    types: [created]
+  push:
+    branches:
+      - main
+      - develop
+      - release
+      - feature/*
+      - hotfix/*
+  pull_request:
+    branches:
+      - main
+      - develop
+      - release
+      - feature/*
+      - hotfix/*
+jobs:
+  test:
+    runs-on: windows-latest 
+    steps:
+      - name: Haal de repository op
+        uses: actions/checkout@v4
+
+        # Pin naar .NET 8 (voorkomt gebruik van 9.0.304)
+      - name: Create global.json (pin .NET 8)
+        run: |
+          $json = '{ "sdk": { "version": "8.0.0", "rollForward": "latestFeature" } }'
+          Set-Content -Path global.json -Value $json -Encoding UTF8
+          Get-Content global.json
+ 
+      - name: Installeer .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x' 
+ 
+      - name: Installeer MAUI workloads
+        run: dotnet workload install maui
+ 
+      - name: Herstel afhankelijkheden
+        run: |
+            dotnet restore
+            dotnet restore .\Grocery.App\Grocery.App.csproj -r win-x64 -p:PublishReadyToRun=true
+ 
+      - name: Bouw de applicatie
+        run: dotnet build   .\Grocery.App\Grocery.App.csproj -f net8.0-windows10.0.19041.0 -r win-x64 -c Release -p:PublishReadyToRun=true
+ 
+      - name: Voer unit tests uit
+        run: dotnet test .\TestCore\TestCore.csproj -f net8.0 -c Release --no-restore
