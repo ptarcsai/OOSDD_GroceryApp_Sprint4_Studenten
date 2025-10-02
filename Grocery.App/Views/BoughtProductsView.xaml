@@ -6,6 +6,12 @@
              x:Class="Grocery.App.Views.BoughtProductsView"
              x:DataType="vm:BoughtProductsViewModel"
              Title="BoughtProductsView">
+
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="Gekochte Producten" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center" />
+        </Grid>
+    </Shell.TitleView>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
@@ -17,13 +23,14 @@
         </Grid.RowDefinitions>
         <Picker Grid.Column="0" Grid.Row="0" Margin="10,0,0,0" Title="Klik op onderstaand pijltje om een product te selecteren:"
         ItemsSource="{Binding Products}"
-        SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" 
+        SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+        ItemDisplayBinding="{Binding Name}"
         SelectedIndexChanged="Picker_SelectedIndexChanged"
         BackgroundColor="{StaticResource Primary}"
             TextColor="{StaticResource Secondary}">
         </Picker>
-        <Border Grid.Row="1" Grid.Column="0" Stroke="#C49B33" StrokeThickness="4" Padding="5" Margin="5" HorizontalOptions="Center">
-            <CollectionView ItemsSource="{Binding BoughtProductsList}" Margin="5" HorizontalOptions="End" SelectionMode="Single">
+        <Border Grid.Row="1" Grid.Column="0" Stroke="#C49B33" StrokeThickness="4" Padding="5" Margin="5" HorizontalOptions="Fill">
+            <CollectionView ItemsSource="{Binding BoughtProductsList}" Margin="5" HorizontalOptions="Center" SelectionMode="Single">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
                 </CollectionView.ItemsLayout>
@@ -35,6 +42,8 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <!-- Toon hier de naam van de Client naam van de boodschappenlijst -->
+							<Label Grid.Column="0" Text="{Binding Client.Name}" />
+							<Label Grid.Column="1" Text="{Binding GroceryList.Name}" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
