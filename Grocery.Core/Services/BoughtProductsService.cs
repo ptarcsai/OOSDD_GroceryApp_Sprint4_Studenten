@@ -20,7 +20,32 @@ namespace Grocery.Core.Services
         }
         public List<BoughtProducts> Get(int? productId)
         {
-            throw new NotImplementedException();
+            var result = new List<BoughtProducts>(); //Lijst die later aan de ViewModel wordt gegeven
+
+            if (productId == null) return result; //Bij geen product niks tonen
+
+            var product = _productRepository.Get(productId.Value); //Ophalen product en als niet bestaat dan ook niks 
+            if (product == null) return result;
+
+            var items = _groceryListItemsRepository //Lijst filteren op product en positief aantal
+                .GetAll()
+                .Where(i => i.ProductId == product.Id && i.Amount > 0);
+
+            foreach (var listId in items //Unieke id van boodschappenlijst waar dit product in voorkomt
+                .Select(i => i.GroceryListId)
+                .Distinct())
+            {
+
+                var list = _groceryListRepository.Get(listId); //Boodschappenlijst ophalen
+                if (list == null) continue;
+
+                var client = _clientRepository.Get(list.ClientId); //Bijbehorende klant ophalen
+                if (client == null) continue;
+
+                result.Add(new BoughtProducts(client, list, product)); //Regel voor de CollectionView met client, list en product
+            }
+
+            return result;
         }
     }
 }
