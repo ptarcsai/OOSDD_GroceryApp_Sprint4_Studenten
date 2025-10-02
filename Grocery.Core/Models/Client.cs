@@ -1,10 +1,17 @@
 ﻿
 namespace Grocery.Core.Models
 {
+    public enum Role { None, Admin } //Role enum
+
     public partial class Client : Model
     {
+        
+
         public string EmailAddress { get; set; }
         public string Password { get; set; }
+        public Role Role { get; set; } = Role.None; //Standaard Role is None
+        
+
         public Client(int id, string name, string emailAddress, string password) : base(id, name)
         {
             EmailAddress=emailAddress;
