@@ -42,10 +42,10 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <!-- PLaats hier de datavelden voor de tabel-->
-						<Label Text="{Binding Ranking}" Grid.Column="0" HorizontalTextAlignment="Center"/>
+						<Label Text="{Binding Ranking}" Grid.Column="0"/>
 						<Label Text="{Binding Name}" Grid.Column="1"/>
-						<Label Text="{Binding NrOfSells}" Grid.Column="2" HorizontalTextAlignment="Center"/>
-						<Label Text="{Binding Stock}" Grid.Column="3" HorizontalTextAlignment="Center"/>
+						<Label Text="{Binding NrOfSells}" Grid.Column="2"/>
+						<Label Text="{Binding Stock}" Grid.Column="3"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
